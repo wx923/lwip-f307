@@ -40,6 +40,7 @@ typedef struct {
 
     uint32_t de_gpio_port; //RS485方向控制引脚端口
     uint16_t de_gpio_pin; //RS485方向控制引脚
+    uint32_t dma_periph; //DMA外设基地址
     uart_dir_t curr_dir; //当前传输方向
 } UartDevice;
 

@@ -21,7 +21,7 @@ extern SemaphoreHandle_t g_rs485_2_sem;
 
 UartDevice uart1_dev = {
     .usart_periph  = USART1,
-    .baudrate      = 9600,
+    .baudrate      = 38400,
     .dma_rx_ch     = DMA_CH4,
     .rx_buf        = rx_buf1,
     .rx_buf_size   = BSP_UART_RX_BUF_SIZE,
@@ -32,12 +32,13 @@ UartDevice uart1_dev = {
     .tx_done_sem   = NULL,
     .de_gpio_port  = GPIOA,
     .de_gpio_pin   = GPIO_PIN_8,
+    .dma_periph    = DMA0,
     .curr_dir      = UART_DIR_RECV,
 };
 
 UartDevice uart2_dev = {
     .usart_periph  = USART2,
-    .baudrate      = 9600,
+    .baudrate      = 115200,
     .dma_rx_ch     = DMA_CH5,
     .rx_buf        = rx_buf2,
     .rx_buf_size   = BSP_UART_RX_BUF_SIZE,
@@ -46,8 +47,9 @@ UartDevice uart2_dev = {
     .tx_buf        = tx_buf2,
     .tx_buf_size   = BSP_UART_TX_BUF_SIZE,
     .tx_done_sem   = NULL,
-    .de_gpio_port  = GPIOA,
-    .de_gpio_pin   = GPIO_PIN_1,
+    .de_gpio_port  = GPIOC,
+    .de_gpio_pin   = GPIO_PIN_9,
+    .dma_periph    = DMA0,
     .curr_dir      = UART_DIR_RECV,
 };
 
@@ -72,7 +74,7 @@ void bsp_uart1_init(void)
     gpio_bit_reset(GPIOA, GPIO_PIN_8);
 
     /* DMA RX 初始化 */
-    dma_deinit(DMA0, uart1_dev.dma_rx_ch);
+    dma_deinit(uart1_dev.dma_periph, uart1_dev.dma_rx_ch);
     dma_struct_para_init(&dma_init_struct);
     dma_init_struct.periph_addr  = (uint32_t)&USART_DATA(USART1);
     dma_init_struct.periph_width = DMA_PERIPHERAL_WIDTH_8BIT;
@@ -83,12 +85,12 @@ void bsp_uart1_init(void)
     dma_init_struct.periph_inc   = DMA_PERIPH_INCREASE_DISABLE;
     dma_init_struct.memory_inc   = DMA_MEMORY_INCREASE_ENABLE;
     dma_init_struct.direction    = DMA_PERIPHERAL_TO_MEMORY;
-    dma_init(DMA0, uart1_dev.dma_rx_ch, &dma_init_struct);
-    dma_circulation_enable(DMA0, uart1_dev.dma_rx_ch);
-    dma_channel_enable(DMA0, uart1_dev.dma_rx_ch);
+    dma_init(uart1_dev.dma_periph, uart1_dev.dma_rx_ch, &dma_init_struct);
+    dma_circulation_enable(uart1_dev.dma_periph, uart1_dev.dma_rx_ch);
+    dma_channel_enable(uart1_dev.dma_periph, uart1_dev.dma_rx_ch);
 
     /* DMA TX 初始化 */
-    dma_deinit(DMA0, uart1_dev.dma_tx_ch);
+    dma_deinit(uart1_dev.dma_periph, uart1_dev.dma_tx_ch);
     dma_struct_para_init(&dma_init_struct);
     dma_init_struct.periph_addr  = (uint32_t)&USART_DATA(USART1);
     dma_init_struct.periph_width = DMA_PERIPHERAL_WIDTH_8BIT;
@@ -99,9 +101,9 @@ void bsp_uart1_init(void)
     dma_init_struct.periph_inc   = DMA_PERIPH_INCREASE_DISABLE;
     dma_init_struct.memory_inc   = DMA_MEMORY_INCREASE_ENABLE;
     dma_init_struct.direction    = DMA_MEMORY_TO_PERIPHERAL;
-    dma_init(DMA0, uart1_dev.dma_tx_ch, &dma_init_struct);
-    dma_flag_clear(DMA0, uart1_dev.dma_tx_ch, DMA_FLAG_FTF);
-    dma_interrupt_enable(DMA0, uart1_dev.dma_tx_ch, DMA_INT_FTF);
+    dma_init(uart1_dev.dma_periph, uart1_dev.dma_tx_ch, &dma_init_struct);
+    dma_flag_clear(uart1_dev.dma_periph, uart1_dev.dma_tx_ch, DMA_FLAG_FTF);
+    dma_interrupt_enable(uart1_dev.dma_periph, uart1_dev.dma_tx_ch, DMA_INT_FTF);
 
     usart_baudrate_set(USART1, uart1_dev.baudrate);
     usart_word_length_set(USART1, USART_WL_8BIT);
@@ -129,18 +131,18 @@ void bsp_uart2_init(void)
     }
     xSemaphoreGive(uart2_dev.tx_done_sem);
 
-    rcu_periph_clock_enable(RCU_GPIOA);
+    rcu_periph_clock_enable(RCU_GPIOC);
     rcu_periph_clock_enable(RCU_AF);
     rcu_periph_clock_enable(RCU_DMA0);
     rcu_periph_clock_enable(RCU_USART2);
 
-    gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_2);
-    gpio_init(GPIOA, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ, GPIO_PIN_3);
-    gpio_init(GPIOA, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_1);
-    gpio_bit_reset(GPIOA, GPIO_PIN_1);
+    gpio_init(GPIOC, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_10);
+    gpio_init(GPIOC, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ, GPIO_PIN_11);
+    gpio_init(GPIOC, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_9);
+    gpio_bit_reset(GPIOC, GPIO_PIN_9);
 
     /* DMA RX 初始化 */
-    dma_deinit(DMA0, uart2_dev.dma_rx_ch);
+    dma_deinit(uart2_dev.dma_periph, uart2_dev.dma_rx_ch);
     dma_struct_para_init(&dma_init_struct);
     dma_init_struct.periph_addr  = (uint32_t)&USART_DATA(USART2);
     dma_init_struct.periph_width = DMA_PERIPHERAL_WIDTH_8BIT;
@@ -151,12 +153,12 @@ void bsp_uart2_init(void)
     dma_init_struct.periph_inc   = DMA_PERIPH_INCREASE_DISABLE;
     dma_init_struct.memory_inc   = DMA_MEMORY_INCREASE_ENABLE;
     dma_init_struct.direction    = DMA_PERIPHERAL_TO_MEMORY;
-    dma_init(DMA0, uart2_dev.dma_rx_ch, &dma_init_struct);
-    dma_circulation_enable(DMA0, uart2_dev.dma_rx_ch);
-    dma_channel_enable(DMA0, uart2_dev.dma_rx_ch);
+    dma_init(uart2_dev.dma_periph, uart2_dev.dma_rx_ch, &dma_init_struct);
+    dma_circulation_enable(uart2_dev.dma_periph, uart2_dev.dma_rx_ch);
+    dma_channel_enable(uart2_dev.dma_periph, uart2_dev.dma_rx_ch);
 
     /* DMA TX 初始化 */
-    dma_deinit(DMA0, uart2_dev.dma_tx_ch);
+    dma_deinit(uart2_dev.dma_periph, uart2_dev.dma_tx_ch);
     dma_struct_para_init(&dma_init_struct);
     dma_init_struct.periph_addr  = (uint32_t)&USART_DATA(USART2);
     dma_init_struct.periph_width = DMA_PERIPHERAL_WIDTH_8BIT;
@@ -167,9 +169,9 @@ void bsp_uart2_init(void)
     dma_init_struct.periph_inc   = DMA_PERIPH_INCREASE_DISABLE;
     dma_init_struct.memory_inc   = DMA_MEMORY_INCREASE_ENABLE;
     dma_init_struct.direction    = DMA_MEMORY_TO_PERIPHERAL;
-    dma_init(DMA0, uart2_dev.dma_tx_ch, &dma_init_struct);
-    dma_flag_clear(DMA0, uart2_dev.dma_tx_ch, DMA_FLAG_FTF);
-    dma_interrupt_enable(DMA0, uart2_dev.dma_tx_ch, DMA_INT_FTF);
+    dma_init(uart2_dev.dma_periph, uart2_dev.dma_tx_ch, &dma_init_struct);
+    dma_flag_clear(uart2_dev.dma_periph, uart2_dev.dma_tx_ch, DMA_FLAG_FTF);
+    dma_interrupt_enable(uart2_dev.dma_periph, uart2_dev.dma_tx_ch, DMA_INT_FTF);
 
     usart_baudrate_set(USART2, uart2_dev.baudrate);
     usart_word_length_set(USART2, USART_WL_8BIT);
@@ -198,10 +200,10 @@ int bsp_uart_send(UartDevice *dev, const uint8_t *data, uint16_t len)
     gpio_bit_set(dev->de_gpio_port, dev->de_gpio_pin);
     dev->curr_dir = UART_DIR_SEND;
 
-    dma_channel_disable(DMA0, dev->dma_tx_ch);
-    dma_memory_address_config(DMA0, dev->dma_tx_ch, (uint32_t)dev->tx_buf);
-    dma_transfer_number_config(DMA0, dev->dma_tx_ch, len);
-    dma_channel_enable(DMA0, dev->dma_tx_ch);
+    dma_channel_disable(dev->dma_periph, dev->dma_tx_ch);
+    dma_memory_address_config(dev->dma_periph, dev->dma_tx_ch, (uint32_t)dev->tx_buf);
+    dma_transfer_number_config(dev->dma_periph, dev->dma_tx_ch, len);
+    dma_channel_enable(dev->dma_periph, dev->dma_tx_ch);
 
     return 0;
 }
@@ -213,8 +215,8 @@ void USART1_IRQHandler(void)
         (void)USART_STAT0(USART1);
         (void)USART_DATA(USART1);
 
-        uart1_dev.rx_len = uart1_dev.rx_buf_size - dma_transfer_number_get(DMA0, uart1_dev.dma_rx_ch);
-        dma_channel_disable(DMA0, uart1_dev.dma_rx_ch);
+        uart1_dev.rx_len = uart1_dev.rx_buf_size - dma_transfer_number_get(uart1_dev.dma_periph, uart1_dev.dma_rx_ch);
+        dma_channel_disable(uart1_dev.dma_periph, uart1_dev.dma_rx_ch);
 
         BaseType_t xHigherPriorityTaskWoken = pdFALSE;
         xSemaphoreGiveFromISR(g_rs485_1_sem, &xHigherPriorityTaskWoken);
@@ -229,8 +231,8 @@ void USART2_IRQHandler(void)
         (void)USART_STAT0(USART2);
         (void)USART_DATA(USART2);
 
-        uart2_dev.rx_len = uart2_dev.rx_buf_size - dma_transfer_number_get(DMA0, uart2_dev.dma_rx_ch);
-        dma_channel_disable(DMA0, uart2_dev.dma_rx_ch);
+        uart2_dev.rx_len = uart2_dev.rx_buf_size - dma_transfer_number_get(uart2_dev.dma_periph, uart2_dev.dma_rx_ch);
+        dma_channel_disable(uart2_dev.dma_periph, uart2_dev.dma_rx_ch);
 
         BaseType_t xHigherPriorityTaskWoken = pdFALSE;
         xSemaphoreGiveFromISR(g_rs485_2_sem, &xHigherPriorityTaskWoken);
@@ -240,18 +242,18 @@ void USART2_IRQHandler(void)
 
 void DMA0_Channel3_IRQHandler(void)
 {
-    if (dma_interrupt_flag_get(DMA0, DMA_CH3, DMA_INT_FLAG_FTF) != RESET) {
-        dma_interrupt_flag_clear(DMA0, DMA_CH3, DMA_INT_FLAG_FTF);
+    if (dma_interrupt_flag_get(uart1_dev.dma_periph, DMA_CH3, DMA_INT_FLAG_FTF) != RESET) {
+        dma_interrupt_flag_clear(uart1_dev.dma_periph, DMA_CH3, DMA_INT_FLAG_FTF);
 
         while (usart_flag_get(USART1, USART_FLAG_TC) == RESET);
 
         gpio_bit_reset(uart1_dev.de_gpio_port, uart1_dev.de_gpio_pin);
         uart1_dev.curr_dir = UART_DIR_RECV;
 
-        dma_channel_disable(DMA0, uart1_dev.dma_rx_ch);
-        dma_memory_address_config(DMA0, uart1_dev.dma_rx_ch, (uint32_t)uart1_dev.rx_buf);
-        dma_transfer_number_config(DMA0, uart1_dev.dma_rx_ch, uart1_dev.rx_buf_size);
-        dma_channel_enable(DMA0, uart1_dev.dma_rx_ch);
+        dma_channel_disable(uart1_dev.dma_periph, uart1_dev.dma_rx_ch);
+        dma_memory_address_config(uart1_dev.dma_periph, uart1_dev.dma_rx_ch, (uint32_t)uart1_dev.rx_buf);
+        dma_transfer_number_config(uart1_dev.dma_periph, uart1_dev.dma_rx_ch, uart1_dev.rx_buf_size);
+        dma_channel_enable(uart1_dev.dma_periph, uart1_dev.dma_rx_ch);
 
         BaseType_t xHigherPriorityTaskWoken = pdFALSE;
         xSemaphoreGiveFromISR(uart1_dev.tx_done_sem, &xHigherPriorityTaskWoken);
@@ -261,18 +263,18 @@ void DMA0_Channel3_IRQHandler(void)
 
 void DMA0_Channel6_IRQHandler(void)
 {
-    if (dma_interrupt_flag_get(DMA0, DMA_CH6, DMA_INT_FLAG_FTF) != RESET) {
-        dma_interrupt_flag_clear(DMA0, DMA_CH6, DMA_INT_FLAG_FTF);
+    if (dma_interrupt_flag_get(uart2_dev.dma_periph, DMA_CH6, DMA_INT_FLAG_FTF) != RESET) {
+        dma_interrupt_flag_clear(uart2_dev.dma_periph, DMA_CH6, DMA_INT_FLAG_FTF);
 
         while (usart_flag_get(USART2, USART_FLAG_TC) == RESET);
 
         gpio_bit_reset(uart2_dev.de_gpio_port, uart2_dev.de_gpio_pin);
         uart2_dev.curr_dir = UART_DIR_RECV;
 
-        dma_channel_disable(DMA0, uart2_dev.dma_rx_ch);
-        dma_memory_address_config(DMA0, uart2_dev.dma_rx_ch, (uint32_t)uart2_dev.rx_buf);
-        dma_transfer_number_config(DMA0, uart2_dev.dma_rx_ch, uart2_dev.rx_buf_size);
-        dma_channel_enable(DMA0, uart2_dev.dma_rx_ch);
+        dma_channel_disable(uart2_dev.dma_periph, uart2_dev.dma_rx_ch);
+        dma_memory_address_config(uart2_dev.dma_periph, uart2_dev.dma_rx_ch, (uint32_t)uart2_dev.rx_buf);
+        dma_transfer_number_config(uart2_dev.dma_periph, uart2_dev.dma_rx_ch, uart2_dev.rx_buf_size);
+        dma_channel_enable(uart2_dev.dma_periph, uart2_dev.dma_rx_ch);
 
         BaseType_t xHigherPriorityTaskWoken = pdFALSE;
         xSemaphoreGiveFromISR(uart2_dev.tx_done_sem, &xHigherPriorityTaskWoken);

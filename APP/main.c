@@ -52,7 +52,7 @@ SemaphoreHandle_t g_reg_mutex;
 int main(void)
 {
     __disable_irq();
-
+    nvic_priority_group_set(NVIC_PRIGROUP_PRE4_SUB0);
     bsp_init();
 
     memset(&g_dsp_mirror_reg, 0, sizeof(g_dsp_mirror_reg));
