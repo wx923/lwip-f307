@@ -86,7 +86,6 @@ void bsp_uart1_init(void)
     dma_init_struct.memory_inc   = DMA_MEMORY_INCREASE_ENABLE;
     dma_init_struct.direction    = DMA_PERIPHERAL_TO_MEMORY;
     dma_init(uart1_dev.dma_periph, uart1_dev.dma_rx_ch, &dma_init_struct);
-    dma_circulation_enable(uart1_dev.dma_periph, uart1_dev.dma_rx_ch);
     dma_channel_enable(uart1_dev.dma_periph, uart1_dev.dma_rx_ch);
 
     /* DMA TX 初始化 */
@@ -154,7 +153,6 @@ void bsp_uart2_init(void)
     dma_init_struct.memory_inc   = DMA_MEMORY_INCREASE_ENABLE;
     dma_init_struct.direction    = DMA_PERIPHERAL_TO_MEMORY;
     dma_init(uart2_dev.dma_periph, uart2_dev.dma_rx_ch, &dma_init_struct);
-    dma_circulation_enable(uart2_dev.dma_periph, uart2_dev.dma_rx_ch);
     dma_channel_enable(uart2_dev.dma_periph, uart2_dev.dma_rx_ch);
 
     /* DMA TX 初始化 */

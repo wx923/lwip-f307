@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>GD32F30X_HD, USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>.\APP;.\BSP;.\Drives\Firmware;.\Drives\Firmware\CMSIS\GD\GD32F30x\Include;.\Drives\Firmware\CMSIS\GD\GD32F30x\Source\ARM;.\Drives\Firmware\GD32F30x_standard_peripheral\Include;.\Services;.\Drives\Firmware\CMSIS;.\Drives\FreeRTOS-Kernel-main;.\Drives\FreeRTOS-Kernel-main\include;.\Drives\FreeRTOS-Kernel-main\portable\GCC\ARM_CM4F;.\BSP\Inc;.\Services\data;.\Services\protocol</IncludePath>
+              <IncludePath>.\APP;.\BSP;.\Drives\Firmware;.\Drives\Firmware\CMSIS\GD\GD32F30x\Include;.\Drives\Firmware\CMSIS\GD\GD32F30x\Source\ARM;.\Drives\Firmware\GD32F30x_standard_peripheral\Include;.\Services;.\Drives\Firmware\CMSIS;.\Drives\FreeRTOS-Kernel-main;.\Drives\FreeRTOS-Kernel-main\include;.\Drives\FreeRTOS-Kernel-main\portable\GCC\ARM_CM4F;.\BSP\Inc;.\Services\data;.\Services\protocol;.\Services\ModbusrtuSlvArm;.\Services\ModbusrtuSlvArm\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -404,32 +404,10 @@
               <FileType>5</FileType>
               <FilePath>.\APP\FreeRTOSConfig.h</FilePath>
             </File>
-            <File>
-              <FileName>DSP_MasterTask.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\APP\DSP_MasterTask.c</FilePath>
-            </File>
-            <File>
-              <FileName>MB_SlaveTask.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\APP\MB_SlaveTask.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>BSP</GroupName>
-          <Files>
-            <File>
-              <FileName>bsp_init.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\BSP\bsp_init.c</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\BSP\bsp_uart.c</FilePath>
-            </File>
-          </Files>
         </Group>
         <Group>
           <GroupName>Services</GroupName>
@@ -438,11 +416,6 @@
               <FileName>dsp_mirror.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Services\data\dsp_mirror.c</FilePath>
-            </File>
-            <File>
-              <FileName>modbus_rtu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Services\protocol\modbus_rtu.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -628,6 +601,41 @@
               <FileName>port.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Drives\FreeRTOS-Kernel-main\portable\GCC\ARM_CM4F\port.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>ModbusSlave</GroupName>
+          <Files>
+            <File>
+              <FileName>mb_slv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Services\ModbusrtuSlvArm\src\mb_slv.c</FilePath>
+            </File>
+            <File>
+              <FileName>mb_slv_crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Services\ModbusrtuSlvArm\src\mb_slv_crc.c</FilePath>
+            </File>
+            <File>
+              <FileName>mb_slv_data.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Services\ModbusrtuSlvArm\src\mb_slv_data.c</FilePath>
+            </File>
+            <File>
+              <FileName>mb_slv_frame.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Services\ModbusrtuSlvArm\src\mb_slv_frame.c</FilePath>
+            </File>
+            <File>
+              <FileName>mb_slv_func.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Services\ModbusrtuSlvArm\src\mb_slv_func.c</FilePath>
+            </File>
+            <File>
+              <FileName>mb_slv_port_gd32.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Services\ModbusrtuSlvArm\src\mb_slv_port_gd32.c</FilePath>
             </File>
           </Files>
         </Group>

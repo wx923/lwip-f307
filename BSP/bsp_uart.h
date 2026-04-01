@@ -35,7 +35,6 @@ typedef struct {
     uint8_t *tx_buf; //发送缓冲区   
     uint16_t tx_buf_size; //发送缓冲区大小  
 
-    SemaphoreHandle_t frame_sem; //帧信号量
     SemaphoreHandle_t tx_done_sem; //发送完成信号量
 
     uint32_t de_gpio_port; //RS485方向控制引脚端口

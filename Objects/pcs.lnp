@@ -1,11 +1,6 @@
 --cpu=Cortex-M4.fp.sp
 ".\objects\main.o"
-".\objects\dsp_mastertask.o"
-".\objects\mb_slavetask.o"
-".\objects\bsp_init.o"
-".\objects\bsp_uart.o"
 ".\objects\dsp_mirror.o"
-".\objects\modbus_rtu.o"
 ".\objects\system_gd32f30x.o"
 ".\objects\startup_gd32f30x_hd.o"
 ".\objects\gd32f30x_adc.o"
@@ -40,6 +35,12 @@
 ".\objects\timers.o"
 ".\objects\heap_4.o"
 ".\objects\port.o"
+".\objects\mb_slv.o"
+".\objects\mb_slv_crc.o"
+".\objects\mb_slv_data.o"
+".\objects\mb_slv_frame.o"
+".\objects\mb_slv_func.o"
+".\objects\mb_slv_port_gd32.o"
 --strict --scatter ".\Objects\pcs.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
