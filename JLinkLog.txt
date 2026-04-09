@@ -1,47 +1,24 @@
-T1408 007:077.581   SEGGER J-Link V7.92k Log File
-T1408 007:077.820   DLL Compiled: Oct 18 2023 14:58:31
-T1408 007:077.845   Logging started @ 2026-03-28 09:17
-T1408 007:077.867   Process: D:\keil5\UV4\UV4.exe
-T1408 007:077.918 - 7077.908ms
-T1408 007:077.981 JLINK_SetWarnOutHandler(...)
-T1408 007:078.015 - 0.039ms
-T1408 007:078.053 JLINK_OpenEx(...)
-T1408 007:079.129   
+T7008 002:029.893   SEGGER J-Link V7.92k Log File
+T7008 002:030.077   DLL Compiled: Oct 18 2023 14:58:31
+T7008 002:030.085   Logging started @ 2026-04-09 05:44
+T7008 002:030.091   Process: D:\keil5\UV4\UV4.exe
+T7008 002:030.101 - 2030.097ms
+T7008 002:030.113 JLINK_SetWarnOutHandler(...)
+T7008 002:030.119 - 0.009ms
+T7008 002:030.126 JLINK_OpenEx(...)
+T7008 002:030.979   
   ***** Error: 
-T1408 007:079.181   Cannot connect to J-Link.
-T1408 007:079.315 - 1.252ms returns "Cannot connect to J-Link."
-T1408 007:079.590 
+T7008 002:030.997   Cannot connect to J-Link.
+T7008 002:031.073 - 0.943ms returns "Cannot connect to J-Link."
+T7008 002:031.415 
   ***** Warning: 
-T1408 007:079.639 API Error: API JLINK_GetHardwareVersion function called before JLINKARM_Open()
-T1408 007:079.674 JLINK_GetHardwareVersion()
-T1408 007:080.165   
+T7008 002:031.433 API Error: API JLINK_GetHardwareVersion function called before JLINKARM_Open()
+T7008 002:031.443 JLINK_GetHardwareVersion()
+T7008 002:031.857   
   ***** Error: 
-T1408 007:088.649   Cannot connect to J-Link.
-T1408 007:088.705 - 9.030ms
-T1408 029:038.591 JLINK_IsOpen()
-T1408 029:038.646 - 0.036ms returns 0x00
-T1408 029:038.665 JLINK_EMU_SelectByUSBSN(SerialNo = 0)
-T1408 029:039.273 - 0.610ms returns 0xFFFFFFFF
-T1408 029:039.292 JLINK_EnableLog(...)
-T1408 029:039.298 - 0.006ms
-T1408 029:039.314 JLINK_SetLogFile(...)
-T1408 029:039.321 - 0.014ms
-T1408 029:039.329 JLINK_SetWarnOutHandler(...)
-T1408 029:039.335 - 0.006ms
-T1408 029:039.344 JLINK_OpenEx(...)
-T1408 029:039.862   
-  ***** Error: 
-T1408 029:039.883   Cannot connect to J-Link.
-T1408 029:039.946 - 0.601ms returns "Cannot connect to J-Link."
-T1408 029:040.243 
-  ***** Warning: 
-T1408 029:040.263 API Error: API JLINK_GetHardwareVersion function called before JLINKARM_Open()
-T1408 029:040.281 JLINK_GetHardwareVersion()
-T1408 029:040.782   
-  ***** Error: 
-T1408 029:040.801   Cannot connect to J-Link.
-T1408 029:040.840 - 0.559ms
-T1408 034:494.980 JLINK_Close()
-T1408 034:495.098 - 0.117ms
-T1408 034:495.123   
-T1408 034:495.131   Closed
+T7008 002:031.871   Cannot connect to J-Link.
+T7008 002:031.904 - 0.460ms
+T7008 005:629.962 JLINK_Close()
+T7008 005:630.079 - 0.116ms
+T7008 005:630.097   
+T7008 005:630.105   Closed

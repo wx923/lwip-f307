@@ -1,5 +1,5 @@
-./objects/main.o: APP\main.c APP\gd32f30x.h \
-  Drives\Firmware\CMSIS\core_cm4.h \
+./objects/bsp_debuguart.o: BSP\bsp_debuguart.c BSP\bsp_debuguart.h \
+  APP\gd32f30x.h Drives\Firmware\CMSIS\core_cm4.h \
   D:\keil5\ARM\ARMCLANG\include\stdint.h \
   Drives\Firmware\CMSIS\core_cmInstr.h \
   Drives\Firmware\CMSIS\core_cmFunc.h \
@@ -30,36 +30,4 @@
   Drives\Firmware\GD32F30x_standard_peripheral\Include\gd32f30x_misc.h \
   Drives\Firmware\GD32F30x_standard_peripheral\Include\gd32f30x_enet.h \
   Drives\Firmware\GD32F30x_standard_peripheral\Include\gd32f30x_exmc.h \
-  Drives\FreeRTOS-Kernel-main\include\FreeRTOS.h \
-  D:\keil5\ARM\ARMCLANG\include\stddef.h APP\FreeRTOSConfig.h \
-  Drives\FreeRTOS-Kernel-main\include\projdefs.h \
-  Drives\FreeRTOS-Kernel-main\include\portable.h \
-  Drives\FreeRTOS-Kernel-main\include\deprecated_definitions.h \
-  Drives\FreeRTOS-Kernel-main\portable\GCC\ARM_CM4F\portmacro.h \
-  Drives\FreeRTOS-Kernel-main\include\mpu_wrappers.h \
-  Drives\FreeRTOS-Kernel-main\include\task.h \
-  Drives\FreeRTOS-Kernel-main\include\list.h BSP\bsp_debuguart.h \
-  Drives\lwip-self\netconf.h Drives\lwip-self\enet_setup.h \
-  Drives\lwip-2.2.1\src\include\lwip\netif.h \
-  Drives\lwip-2.2.1\src\include\lwip\opt.h Drives\lwip-self\lwipopts.h \
-  Drives\lwip-2.2.1\src\include\lwip\debug.h \
-  Drives\lwip-2.2.1\src\include\lwip\arch.h \
-  Drives\lwip-2.2.1\port\GD32F30x\arch\cc.h \
-  Drives\lwip-2.2.1\port\GD32F30x\arch\cpu.h \
-  D:\keil5\ARM\ARMCLANG\include\stdio.h \
-  D:\keil5\ARM\ARMCLANG\include\stdlib.h \
-  D:\keil5\ARM\ARMCLANG\include\inttypes.h \
-  D:\keil5\ARM\ARMCLANG\include\limits.h \
-  D:\keil5\ARM\ARMCLANG\include\ctype.h \
-  Drives\lwip-2.2.1\src\include\lwip\err.h \
-  Drives\lwip-2.2.1\src\include\lwip\ip_addr.h \
-  Drives\lwip-2.2.1\src\include\lwip\def.h \
-  Drives\lwip-2.2.1\src\include\lwip\ip4_addr.h \
-  Drives\lwip-2.2.1\src\include\lwip\ip6_addr.h \
-  Drives\lwip-2.2.1\src\include\lwip\pbuf.h \
-  Drives\lwip-2.2.1\src\include\lwip\stats.h \
-  Drives\lwip-2.2.1\src\include\lwip\mem.h \
-  Drives\lwip-2.2.1\src\include\lwip\memp.h \
-  Drives\lwip-2.2.1\src\include\lwip\priv\memp_std.h \
-  Drives\lwip-2.2.1\src\include\lwip\priv\memp_priv.h \
-  Drives\lwip-2.2.1\src\include\lwip\priv\mem_priv.h
+  D:\keil5\ARM\ARMCLANG\include\stdio.h

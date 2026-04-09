@@ -190,7 +190,7 @@
             <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
-            <useUlib>0</useUlib>
+            <useUlib>1</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
             <nSecure>0</nSecure>
@@ -419,6 +419,11 @@
               <FileType>1</FileType>
               <FilePath>.\Drives\lwip-self\enet_setup.c</FilePath>
             </File>
+            <File>
+              <FileName>bsp_debuguart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\BSP\bsp_debuguart.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -440,9 +445,9 @@
               <FilePath>.\Drives\Firmware\CMSIS\GD\GD32F30x\Source\system_gd32f30x.c</FilePath>
             </File>
             <File>
-              <FileName>startup_gd32f30x_hd.s</FileName>
+              <FileName>startup_gd32f30x_cl.s</FileName>
               <FileType>2</FileType>
-              <FilePath>.\Drives\Firmware\CMSIS\GD\GD32F30x\Source\ARM\startup_gd32f30x_hd.s</FilePath>
+              <FilePath>..\project-modbusrtu\Drives\Firmware\CMSIS\GD\GD32F30x\Source\ARM\startup_gd32f30x_cl.s</FilePath>
             </File>
           </Files>
         </Group>
