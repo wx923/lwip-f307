@@ -40,7 +40,7 @@ OF SUCH DAMAGE.
                                                             for certain critical regions during buffer allocation,
                                                             deallocation and memory allocation and deallocation */                                                            
 
-#define NO_SYS                  1                        /* NO_SYS==1: provides VERY minimal functionality. 
+#define NO_SYS                  0                        /* NO_SYS==1: provides VERY minimal functionality. 
                                                             Otherwise, use lwIP facilities */
 
 /*  memory options  */
@@ -113,10 +113,10 @@ OF SUCH DAMAGE.
                                                             checksums by hardware */
 
 /* sequential layer options */
-#define LWIP_NETCONN            0                        /* set to 1 to enable netconn API (require to use api_lib.c) */
+#define LWIP_NETCONN            1                        /* set to 1 to enable netconn API (require to use api_lib.c) */
 
 /* socket options */
-#define LWIP_SOCKET             0                        /* set to 1 to enable socket API (require to use sockets.c) */
+#define LWIP_SOCKET             1                        /* set to 1 to enable socket API (require to use sockets.c) */
 
 /* Lwip debug options */
 #define LWIP_DEBUG              0
@@ -158,5 +158,6 @@ OF SUCH DAMAGE.
     #define CHECKSUM_CHECK_TCP              1
     #define CHECKSUM_GEN_ICMP               1
 #endif
+
 
 #endif /* LWIPOPTS_H */

@@ -2,48 +2,26 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
-#include "mb_slv.h"
-#include "mb_slv_config.h"
-
-
-static void mb_slave_task(void *pvParameters);
-
+#include "netconf.h"
+#include "enet_setup.h"
 
 int main(void)
 {
-    /* ---------- System clock (120 MHz) ---------- */
-    SystemInit();
-    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
-    xTaskCreate(
-        mb_slave_task,
-        "MB_Slave",
-        256,
-        NULL,
-        3,
-        NULL
-    );
 
+    NVIC_SetPriorityGrouping(NVIC_PRIGROUP_PRE4_SUB0);
+
+    /* ---------- Ethernet hardware setup (ENET GPIOs, clocks, MAC, DMA) ---------- */
+    enet_system_setup();
+
+    /* ---------- Initialize LwIP stack ---------- */
+    lwip_stack_init();
+
+    /* ---------- Start FreeRTOS scheduler ---------- */
     vTaskStartScheduler();
 
     /* Should never reach here */
-    while (1) {}
-}
-
-/*=============================================*/
-/*  Modbus RTU slave task                      */
-/*=============================================*/
-
-static void mb_slave_task(void *pvParameters)
-{
-    (void)pvParameters;
-
-    /* ---------- Init Modbus RTU slave (USART0) ---------- */
-    if (mb_slave_init(MB_SLV_ADDR, 38400) != 0) {
-        while (1) {}
-    }
-
-    /* ---------- Poll loop ---------- */
-    while (1) {
-        mb_slave_poll();
+    while (1)
+    {
+        /* Do nothing */
     }
 }

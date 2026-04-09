@@ -1,6 +1,6 @@
 /*!
-    \file    gd32f30x_enet_eval.h
-    \brief   the header file of gd32f30x_enet_eval 
+    \file    enet_setup.h
+    \brief   ethernet hardware configuration header
 
     \version 2026-2-6, V3.0.3, firmware for GD32F30x
 */
@@ -32,8 +32,8 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 OF SUCH DAMAGE.
 */
 
-#ifndef GD32F30x_ENET_EVAL_H
-#define GD32F30x_ENET_EVAL_H
+#ifndef ENET_SETUP_H
+#define ENET_SETUP_H
 
 #include "lwip/netif.h"
 
@@ -41,4 +41,6 @@ OF SUCH DAMAGE.
 /* setup ethernet system(GPIOs, clocks, MAC, DMA, systick) */
 void  enet_system_setup(void);
 
-#endif /* GD32F30x_ENET_EVAL_H */
+
+
+#endif /* ENET_SETUP_H */
