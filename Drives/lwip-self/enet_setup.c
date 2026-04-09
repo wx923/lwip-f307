@@ -36,6 +36,7 @@ OF SUCH DAMAGE.
 #include "enet_setup.h"
 #include "netconf.h"
 #include "ethernetif.h"
+#include <stdio.h>
 
 static __IO uint32_t enet_init_status = 0;
 
@@ -95,6 +96,27 @@ void enet_system_setup(void)
     rcu_periph_clock_enable(RCU_ENET);
     rcu_periph_clock_enable(RCU_ENETTX);
     rcu_periph_clock_enable(RCU_ENETRX);
+
+    // ========== PHY MDIO 通信诊断 ==========
+    // 等待 PHY 上电稳定（至少 50ms）
+    for(volatile uint32_t i = 0; i < 0xFFFF; i++);
+
+    uint16_t phy_id1 = 0, phy_id2 = 0, bsr = 0;
+    enet_phy_write_read(ENET_PHY_READ, PHY_ADDRESS, 2, &phy_id1);  // PHY ID1
+    enet_phy_write_read(ENET_PHY_READ, PHY_ADDRESS, 3, &phy_id2);  // PHY ID2
+    enet_phy_write_read(ENET_PHY_READ, PHY_ADDRESS, 1, &bsr);       // BSR
+
+    if (phy_id1 == 0xFFFF || phy_id1 == 0x0000 ||
+        phy_id2 == 0xFFFF || phy_id2 == 0x0000) {
+        printf("PHY MDIO 通信失败！ID1=0x%04X ID2=0x%04X\r\n", phy_id1, phy_id2);
+        while(1);
+    }
+    if (phy_id1 == 0x2000 && phy_id2 == 0x5C90) {
+        printf("检测到 DP83848，MDIO 通信正常！BSR = 0x%04X\r\n", bsr);
+    } else {
+        printf("PHY ID 不匹配，ID1=0x%04X ID2=0x%04X\r\n", phy_id1, phy_id2);
+    }
+    // ========== 诊断结束 ==========
 
     //重置ETH
     enet_deinit();
