@@ -2,7 +2,7 @@ Dependencies for Project 'pcs', Target 'PCS': (DO NOT MODIFY !)
 CompilerVersion: 6210000::V6.21::ARMCLANG
 F (.\APP\gd32f30x.h)(0x69C349FF)()
 F (.\APP\gd32f30x_libopt.h)(0x6986B5D5)()
-F (.\APP\main.c)(0x69D73C4E)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ./APP -I ./BSP -I ./Drives/Firmware -I ./Drives/Firmware/CMSIS/GD/GD32F30x/Include -I ./Drives/Firmware/CMSIS/GD/GD32F30x/Source/ARM -I ./Drives/Firmware/GD32F30x_standard_peripheral/Include -I ./Services -I ./Drives/Firmware/CMSIS -I ./Drives/FreeRTOS-Kernel-main -I ./Drives/FreeRTOS-Kernel-main/include -I ./Drives/FreeRTOS-Kernel-main/portable/GCC/ARM_CM4F -I ./BSP/Inc -I ./Services/data -I ./Services/protocol -I ./Services/ModbusrtuSlvArm -I ./Services/ModbusrtuSlvArm/inc -I ./Drives/lwip-self -I ./Drives/lwip-2.2.1/port/GD32F30x/arch -I ./Drives/lwip-2.2.1/src/include -I ./Drives/lwip-2.2.1/port/GD32F30x -I ./Drives/lwip-2.2.1/port/GD32F30x/Basic-ID:/keil5/Packs/GigaDevice/GD32F30x_DFP/2.2.1/Device/Include-D__UVISION_VERSION="539" -DGD32F30X_CL -DGD32F30X_CL -DUSE_STDPERIPH_DRIVER-o ./objects/main.o -MD)
+F (.\APP\main.c)(0x69D76CF9)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ./APP -I ./BSP -I ./Drives/Firmware -I ./Drives/Firmware/CMSIS/GD/GD32F30x/Include -I ./Drives/Firmware/CMSIS/GD/GD32F30x/Source/ARM -I ./Drives/Firmware/GD32F30x_standard_peripheral/Include -I ./Services -I ./Drives/Firmware/CMSIS -I ./Drives/FreeRTOS-Kernel-main -I ./Drives/FreeRTOS-Kernel-main/include -I ./Drives/FreeRTOS-Kernel-main/portable/GCC/ARM_CM4F -I ./BSP/Inc -I ./Services/data -I ./Services/protocol -I ./Services/ModbusrtuSlvArm -I ./Services/ModbusrtuSlvArm/inc -I ./Drives/lwip-self -I ./Drives/lwip-2.2.1/port/GD32F30x/arch -I ./Drives/lwip-2.2.1/src/include -I ./Drives/lwip-2.2.1/port/GD32F30x -I ./Drives/lwip-2.2.1/port/GD32F30x/Basic-ID:/keil5/Packs/GigaDevice/GD32F30x_DFP/2.2.1/Device/Include-D__UVISION_VERSION="539" -DGD32F30X_CL -DGD32F30X_CL -DUSE_STDPERIPH_DRIVER-o ./objects/main.o -MD)
 I (Drives\Firmware\CMSIS\core_cm4.h)(0x697AD2EC)
 I (D:\keil5\ARM\ARMCLANG\include\stdint.h)(0x6569B012)
 I (Drives\Firmware\CMSIS\core_cmInstr.h)(0x697AD2EC)
@@ -43,6 +43,8 @@ I (Drives\FreeRTOS-Kernel-main\portable\GCC\ARM_CM4F\portmacro.h)(0x696D2898)
 I (Drives\FreeRTOS-Kernel-main\include\mpu_wrappers.h)(0x696D2898)
 I (Drives\FreeRTOS-Kernel-main\include\task.h)(0x696D2898)
 I (Drives\FreeRTOS-Kernel-main\include\list.h)(0x696D2898)
+I (Drives\FreeRTOS-Kernel-main\include\semphr.h)(0x696D2898)
+I (Drives\FreeRTOS-Kernel-main\include\queue.hhSP\bsp_debuguart.h)(0x00000000)
 I (Drives\lwip-self\netconf.hnrives\lwip-self\enet_setup.h)(0x00000000)
 I (Drives\lwip-2.2.1\src\include\lwip\netif.h)(0x6986B5CB)
 I (Drives\lwip-2.2.1\src\include\lwip\opt.h.rives\lwip-self\lwipopts.h)(0x00000000)
@@ -67,6 +69,11 @@ I (Drives\lwip-2.2.1\src\include\lwip\memp.h)(0x6986B5CB)
 I (Drives\lwip-2.2.1\src\include\lwip\priv\memp_std.h)(0x6986B5CC)
 I (Drives\lwip-2.2.1\src\include\lwip\priv\memp_priv.h)(0x6986B5CC)
 I (Drives\lwip-2.2.1\src\include\lwip\priv\mem_priv.h)(0x6986B5CC)
+I (Drives\lwip-2.2.1\src\include\lwip\sockets.h)(0x6986B5CB)
+I (Drives\lwip-2.2.1\src\include\lwip\inet.h)(0x6986B5CB)
+I (Drives\lwip-2.2.1\src\include\lwip\errno.h)(0x6986B5CC)
+I (D:\keil5\ARM\ARMCLANG\include\string.h)(0x6569B012)
+I (Drives\lwip-2.2.1\src\include\lwip\netdb.h)(0x6986B5CC)
 F (.\APP\FreeRTOSConfig.h)(0x69CE20EE)()
 F (.\Drives\lwip-self\netconf.c)(0x69D70942)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O1 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ./APP -I ./BSP -I ./Drives/Firmware -I ./Drives/Firmware/CMSIS/GD/GD32F30x/Include -I ./Drives/Firmware/CMSIS/GD/GD32F30x/Source/ARM -I ./Drives/Firmware/GD32F30x_standard_peripheral/Include -I ./Services -I ./Drives/Firmware/CMSIS -I ./Drives/FreeRTOS-Kernel-main -I ./Drives/FreeRTOS-Kernel-main/include -I ./Drives/FreeRTOS-Kernel-main/portable/GCC/ARM_CM4F -I ./BSP/Inc -I ./Services/data -I ./Services/protocol -I ./Services/ModbusrtuSlvArm -I ./Services/ModbusrtuSlvArm/inc -I ./Drives/lwip-self -I ./Drives/lwip-2.2.1/port/GD32F30x/arch -I ./Drives/lwip-2.2.1/src/include -I ./Drives/lwip-2.2.1/port/GD32F30x -I ./Drives/lwip-2.2.1/port/GD32F30x/Basic-ID:/keil5/Packs/GigaDevice/GD32F30x_DFP/2.2.1/Device/Include-D__UVISION_VERSION="539" -DGD32F30X_CL -DGD32F30X_CL -DUSE_STDPERIPH_DRIVER-o ./objects/netconf.o -MD)
 I (Drives\lwip-2.2.1\src\include\lwip\mem.h)(0x6986B5CC)

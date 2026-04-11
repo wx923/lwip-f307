@@ -38,7 +38,9 @@
   Drives\FreeRTOS-Kernel-main\portable\GCC\ARM_CM4F\portmacro.h \
   Drives\FreeRTOS-Kernel-main\include\mpu_wrappers.h \
   Drives\FreeRTOS-Kernel-main\include\task.h \
-  Drives\FreeRTOS-Kernel-main\include\list.h BSP\bsp_debuguart.h \
+  Drives\FreeRTOS-Kernel-main\include\list.h \
+  Drives\FreeRTOS-Kernel-main\include\semphr.h \
+  Drives\FreeRTOS-Kernel-main\include\queue.h BSP\bsp_debuguart.h \
   Drives\lwip-self\netconf.h Drives\lwip-self\enet_setup.h \
   Drives\lwip-2.2.1\src\include\lwip\netif.h \
   Drives\lwip-2.2.1\src\include\lwip\opt.h Drives\lwip-self\lwipopts.h \
@@ -62,4 +64,9 @@
   Drives\lwip-2.2.1\src\include\lwip\memp.h \
   Drives\lwip-2.2.1\src\include\lwip\priv\memp_std.h \
   Drives\lwip-2.2.1\src\include\lwip\priv\memp_priv.h \
-  Drives\lwip-2.2.1\src\include\lwip\priv\mem_priv.h
+  Drives\lwip-2.2.1\src\include\lwip\priv\mem_priv.h \
+  Drives\lwip-2.2.1\src\include\lwip\sockets.h \
+  Drives\lwip-2.2.1\src\include\lwip\inet.h \
+  Drives\lwip-2.2.1\src\include\lwip\errno.h \
+  D:\keil5\ARM\ARMCLANG\include\string.h \
+  Drives\lwip-2.2.1\src\include\lwip\netdb.h

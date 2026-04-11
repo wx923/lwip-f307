@@ -159,5 +159,9 @@ OF SUCH DAMAGE.
     #define CHECKSUM_GEN_ICMP               1
 #endif
 
-
+#define TCPIP_MBOX_SIZE             16
+#define DEFAULT_TCP_RECVMBOX_SIZE   16
+#define DEFAULT_ACCEPTMBOX_SIZE      16
+#define DEFAULT_RAW_RECVMBOX_SIZE    16
+#define DEFAULT_UDP_RECVMBOX_SIZE    16
 #endif /* LWIPOPTS_H */
