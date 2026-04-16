@@ -1,6 +1,6 @@
 /*!
     \file    netconf.h
-    \brief   the header file of netconf 
+    \brief   the header file of netconf
 
     \version 2026-2-6, V3.0.3, firmware for GD32F30x
 */
@@ -35,15 +35,16 @@ OF SUCH DAMAGE.
 #ifndef NETCONF_H
 #define NETCONF_H
 
-#include "main.h"
+/* 全局网络接口，供应用层使用 */
+extern struct netif g_mynetif;
 
-#ifdef USE_DHCP
-void lwip_dhcp_address_get(void);
-#endif /* USE_DHCP */
-
+/*!
+    \brief  初始化 LwIP 协议栈（tcpip_thread 模式）
+    \note   在 main 线程中调用，内部启动 tcpip 线程，
+            并在 tcpip 线程中完成 netif 添加
+*/
 void lwip_stack_init(void);
-void lwip_frame_recv(void);
-void lwip_timeouts_check(__IO uint32_t localtime);
-void lwip_netif_status_callback(struct netif *netif);
 
+/* ENET 中断服务程序 */
+void  ENET_IRQHandler(void);
 #endif /* NETCONF_H */

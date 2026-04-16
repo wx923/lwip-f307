@@ -34,207 +34,99 @@ OF SUCH DAMAGE.
 
 #include "lwip/mem.h"
 #include "lwip/memp.h"
-#include "lwip/tcp.h"
-#include "lwip/udp.h"
-#include "netif/etharp.h"
+#include "lwip/netif.h"
 #include "lwip/dhcp.h"
+#include "lwip/tcpip.h"
+#include "netif/etharp.h"
 #include "ethernetif.h"
-#include "stdint.h"
-#include "main.h"
 #include "netconf.h"
+#include "gd32f30x_enet.h"
 #include <stdio.h>
-#include "lwip/priv/tcp_priv.h"
-#include "lwip/timeouts.h"
 
-#define DHCP_TRIES_MAX_TIMES        4
-
-typedef enum {
-    DHCP_ADDR_NONE = 0,
-    DHCP_ADDR_BEGIN,
-    DHCP_ADDR_GOT,
-    DHCP_ADDR_FAIL
-} dhcp_addr_status_enum;
-
-#ifdef USE_DHCP
-uint32_t finecurtime = 0;
-uint32_t coarsecurtime = 0;
-#if LWIP_DHCP_DOES_ACD_CHECK
-uint32_t acdcurtime = 0;
-#endif /* LWIP_DHCP_DOES_ACD_CHECK */
-dhcp_addr_status_enum dhcp_addr_status = DHCP_ADDR_NONE;
-#endif /* USE_DHCP */
-
+/* 全局网络接口 */
 struct netif g_mynetif;
-uint32_t tcpcurtime = 0;
-uint32_t arpcurtime = 0;
-ip_addr_t ip_address = {0};
 
-void lwip_dhcp_address_get(void);
+/* static 函数，供 tcpip_init_done_callback 内部调用 */
+static void netif_setup_callback(void *arg);
 
-/*!
-    \brief      initializes the LwIP stack
-    \param[in]  none
-    \param[out] none
-    \retval     none
-*/
-void lwip_stack_init(void)
+
+static void tcpip_init_done_callback(void *arg)
 {
-    ip_addr_t gd_ipaddr;
-    ip_addr_t gd_netmask;
-    ip_addr_t gd_gw;
+    (void)arg;
+    tcpip_callback(netif_setup_callback, NULL);
+}
 
-    /* initialize the lwIP dynamic memory heap and memory pools */
-    mem_init();
-    memp_init();
+static void netif_setup_callback(void *arg)
+{
+    ip_addr_t ipaddr, netmask, gw;
 
-#ifdef TIMEOUT_CHECK_USE_LWIP
-    sys_timeouts_init();
-#endif /* TIMEOUT_CHECK_USE_LWIP */
+    (void)arg;
 
-#ifdef USE_DHCP
-    gd_ipaddr.addr = 0;
-    gd_netmask.addr = 0;
-    gd_gw.addr = 0;
-#else
-    IP4_ADDR(&gd_ipaddr, BOARD_IP_ADDR0, BOARD_IP_ADDR1, BOARD_IP_ADDR2, BOARD_IP_ADDR3);
-    IP4_ADDR(&gd_netmask, BOARD_NETMASK_ADDR0, BOARD_NETMASK_ADDR1, BOARD_NETMASK_ADDR2, BOARD_NETMASK_ADDR3);
-    IP4_ADDR(&gd_gw, BOARD_GW_ADDR0, BOARD_GW_ADDR1, BOARD_GW_ADDR2, BOARD_GW_ADDR3);
+    IP4_ADDR(&ipaddr,  192, 168, 1, 100);
+    IP4_ADDR(&netmask, 255, 255, 255, 0);
+    IP4_ADDR(&gw,      192, 168, 1, 1);
 
-#endif /* USE_DHCP */
+    netif_add(&g_mynetif, &ipaddr, &netmask, &gw,
+              NULL, &ethernetif_init, &tcpip_input);
 
-    /* add a new network interface */
-    netif_add(&g_mynetif, &gd_ipaddr, &gd_netmask, &gd_gw, NULL, &ethernetif_init, &ethernet_input);
-
-    /* set a default network interface */
     netif_set_default(&g_mynetif);
-
-    /* set a callback when interface is up/down */
-    netif_set_status_callback(&g_mynetif, lwip_netif_status_callback);
-
-    /* set the flag of netif as NETIF_FLAG_LINK_UP */
     netif_set_link_up(&g_mynetif);
-
-    /* bring an interface up and set the flag of netif as NETIF_FLAG_UP */
     netif_set_up(&g_mynetif);
 }
 
 /*!
-    \brief      called when a farme is received from the interface
-    \param[in]  none
-    \param[out] none
-    \retval     none
+    \brief  初始化 LwIP 协议栈（tcpip_thread 模式）
+    \note   此函数在 main 线程中调用，完成：
+             1. 内存堆/内存池初始化
+             2. 创建 tcpip_thread
+             3. 在 tcpip 线程中添加 netif
+            所有后续 LwIP 网络操作均在线程安全的 tcpip_thread 中执行
 */
-void lwip_frame_recv(void)
+void lwip_stack_init(void)
 {
-    /* get frame from the interface and pass it to the LwIP stack */
-    ethernetif_input(&g_mynetif);
+    /* 初始化内存堆和内存池——必须在 tcpip_init 之前 */
+    mem_init();
+    memp_init();
+
+    /* 启动 tcpip 线程
+     * tcpip_init 内部会创建 FreeRTOS 任务（使用静态内存），
+     * 完成后自动调用 tcpip_init_done_callback */
+    tcpip_init(tcpip_init_done_callback, NULL);
 }
+
+
+/* gd32f30x_enet.c 中的全局 DMA 描述符指针（未在头文件中 extern 声明） */
+extern enet_descriptors_struct *dma_current_rxdesc;
 
 /*!
-    \brief      call the time-related function periodicallytasks
-    \param[in]  curtime: the value of current time
-    \param[out] none
-    \retval     none
+    \brief  ENET 中断服务程序
+    \note   处理 DMA 接收完成中断，将收到的帧送入 LwIP tcpip_thread。
+            此函数由硬件自动调用，必须尽可能精简以减少中断延迟。
+            LwIP 的 input 函数会通过 FreeRTOS 消息队列将数据安全传递到
+            tcpip_thread 上下文中。
 */
-void lwip_timeouts_check(__IO uint32_t curtime)
+void ENET_IRQHandler(void)
 {
-#if LWIP_TCP
-    /* called periodically to dispatch TCP timers every 250 ms */
-    if(curtime - tcpcurtime >= TCP_TMR_INTERVAL) {
-        tcpcurtime =  curtime;
-        tcp_tmr();
-    }
-
-#endif /* LWIP_TCP */
-
-    /* called periodically to dispatch ARP timers every 1s */
-    if((curtime - arpcurtime) >= ARP_TMR_INTERVAL) {
-        arpcurtime = curtime;
-        etharp_tmr();
-    }
-
-#ifdef USE_DHCP
-    /* called periodically to check whether an outstanding DHCP request is timed out every 500 ms */
-    if(curtime - finecurtime >= DHCP_FINE_TIMER_MSECS) {
-        finecurtime = curtime;
-        dhcp_fine_tmr();
-        if((DHCP_ADDR_GOT != dhcp_addr_status) && (DHCP_ADDR_FAIL != dhcp_addr_status)) {
-            /* process DHCP state machine */
-            lwip_dhcp_address_get();
+    /* 检查接收状态中断标志：DMA 接收到一帧数据后置位 */
+    if (SET == enet_interrupt_flag_get(ENET_DMA_INT_FLAG_RS)) {
+        /* 循环读取所有已接收的帧（描述符 DAV=0 表示有数据） */
+        while ((dma_current_rxdesc->status & ENET_RDES0_DAV) == 0) {
+            /* 读取 DMA 缓冲区的帧，送入 LwIP 协议栈。
+             * ethernetif_input 内部会：
+             *   1. 分配 pbuf
+             *   2. 复制 DMA 缓冲区数据到 pbuf
+             *   3. 调用 tcpip_input() 将 pbuf 发往 tcpip_thread
+             *   4. 归还描述符给 DMA
+             * 注意：ethernetif_input 中的 pbuf_free 逻辑足以处理 mbox 满的情况
+             */
+            ethernetif_input(&g_mynetif);
         }
+        /* 清除接收状态中断标志 */
+        enet_interrupt_flag_clear(ENET_DMA_INT_FLAG_RS_CLR);
     }
 
-    /* called periodically to check for lease renewal/rebind timeouts every 60s */
-    if(curtime - coarsecurtime >= DHCP_COARSE_TIMER_MSECS) {
-        coarsecurtime = curtime;
-        dhcp_coarse_tmr();
+    /* 处理发送状态中断（可选：用于统计或 TX 完成通知） */
+    if (SET == enet_interrupt_flag_get(ENET_DMA_INT_FLAG_TS)) {
+        enet_interrupt_flag_clear(ENET_DMA_INT_FLAG_TS_CLR);
     }
-#if LWIP_DHCP_DOES_ACD_CHECK
-    /* called periodically to dispatch ACD timers every 100ms */
-    if((curtime - acdcurtime) >= ACD_TMR_INTERVAL) {
-        acdcurtime = curtime;
-        acd_tmr();
-    }
-#endif /* LWIP_DHCP_DOES_ACD_CHECK */
-#endif /* USE_DHCP */
-
-}
-
-#ifdef USE_DHCP
-/*!
-    \brief      get IP address through DHCP function
-    \param[in]  none
-    \param[out] none
-    \retval     none
-*/
-void lwip_dhcp_address_get(void)
-{
-    ip_addr_t gd_ipaddr;
-    ip_addr_t gd_netmask;
-    ip_addr_t gd_gw;
-    struct dhcp *dhcp_client;
-
-    switch(dhcp_addr_status) {
-    case DHCP_ADDR_NONE:
-        dhcp_start(&g_mynetif);
-
-        dhcp_addr_status = DHCP_ADDR_BEGIN;
-        break;
-
-    case DHCP_ADDR_BEGIN:
-        /* got the IP address */
-        ip_address.addr = g_mynetif.ip_addr.addr;
-
-        if(0 != ip_address.addr) {
-            dhcp_addr_status = DHCP_ADDR_GOT;
-
-            printf("\r\nDHCP -- eval board ip address: %d.%d.%d.%d \r\n", ip4_addr1_16(&ip_address), \
-                   ip4_addr2_16(&ip_address), ip4_addr3_16(&ip_address), ip4_addr4_16(&ip_address));
-        } else {
-            /* DHCP timeout */
-            dhcp_client = netif_dhcp_data(&g_mynetif);
-            if(dhcp_client->tries > DHCP_TRIES_MAX_TIMES) {
-                dhcp_addr_status = DHCP_ADDR_FAIL;
-                /* stop DHCP */
-                dhcp_stop(&g_mynetif);
-
-                /* use static address as IP address */
-                IP4_ADDR(&gd_ipaddr, BOARD_IP_ADDR0, BOARD_IP_ADDR1, BOARD_IP_ADDR2, BOARD_IP_ADDR3);
-                IP4_ADDR(&gd_netmask, BOARD_NETMASK_ADDR0, BOARD_NETMASK_ADDR1, BOARD_NETMASK_ADDR2, BOARD_NETMASK_ADDR3);
-                IP4_ADDR(&gd_gw, BOARD_GW_ADDR0, BOARD_GW_ADDR1, BOARD_GW_ADDR2, BOARD_GW_ADDR3);
-                netif_set_addr(&g_mynetif, &gd_ipaddr, &gd_netmask, &gd_gw);
-            }
-        }
-        break;
-
-    default:
-        break;
-    }
-}
-#endif /* USE_DHCP */
-
-unsigned long sys_now(void)
-{
-    extern volatile unsigned int g_localtime;
-    return g_localtime;
 }

@@ -160,12 +160,10 @@
  * to 1 if left undefined. */
 #define configENABLE_BACKWARD_COMPATIBILITY        0
 
-/* Each task has its own array of pointers that can be used as thread local
- * storage.  configNUM_THREAD_LOCAL_STORAGE_POINTERS set the number of indexes
- * in the array.  See
- * https://www.freertos.org/thread-local-storage-pointers.html Defaults to 0 if
- * left undefined. */
-#define configNUM_THREAD_LOCAL_STORAGE_POINTERS    0
+/* configNUM_THREAD_LOCAL_STORAGE_POINTERS set the number of indexes in the
+ * array.  See https://www.freertos.org/thread-local-storage-pointers.html Defaults
+ * to 0.  Must be >= 1 when LWIP_NETCONN_SEM_PER_THREAD==1. */
+#define configNUM_THREAD_LOCAL_STORAGE_POINTERS    1
 
 /* When configUSE_MINI_LIST_ITEM is set to 0, MiniListItem_t and ListItem_t are
  * both the same. When configUSE_MINI_LIST_ITEM is set to 1, MiniListItem_t
@@ -315,7 +313,7 @@
  * switch performing interrupts.  Not supported by all FreeRTOS ports.  See
  * https://www.freertos.org/RTOS-Cortex-M3-M4.html for information specific to
  * ARM Cortex-M devices. */
-#define configKERNEL_INTERRUPT_PRIORITY          0
+#define configKERNEL_INTERRUPT_PRIORITY          15
 
 /* configMAX_SYSCALL_INTERRUPT_PRIORITY sets the interrupt priority above which
  * FreeRTOS API calls must not be made.  Interrupts above this priority are
@@ -323,7 +321,7 @@
  * to the highest interrupt priority (0).  Not supported by all FreeRTOS ports.
  * See https://www.freertos.org/RTOS-Cortex-M3-M4.html for information specific
  * to ARM Cortex-M devices. */
-#define configMAX_SYSCALL_INTERRUPT_PRIORITY     0
+#define configMAX_SYSCALL_INTERRUPT_PRIORITY     0x40
 
 /* Another name for configMAX_SYSCALL_INTERRUPT_PRIORITY - the name used depends
  * on the FreeRTOS port. */
